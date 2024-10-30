@@ -1,0 +1,9 @@
+{
+	"tesseract_cmd_path": ".\\tesseract\\tesseract.exe",
+	"x_start": 750,
+	"y_start": 200,
+	"width": 450,
+	"height": 100,
+	"get_answer_key": "=",
+	"exit_key": "esc"
+}

@@ -1,33 +1,53 @@
 import json
-import os
 import sys
-from typing import Union
+from typing import Any, Union
 from PIL import ImageGrab
-from PIL import Image
+from PIL.Image import Image
 import numpy as np
-import pytesseract
-import pyperclip
+import numpy.typing as npt
+# mypy stubs :c
+import pytesseract  # type: ignore
 from pyautogui import typewrite, press
 import keyboard
-x_start, y_start = 750, 200
-x_size, y_size = 450, 100
-pytesseract.pytesseract.tesseract_cmd = os.path.join(
-    ".", "tesseract", "tesseract.exe")
+
+
+# SETTINGS
+with open("settings.json") as f:
+    settings = json.load(f)
+
+x_start, y_start = settings["x_start"], settings["y_start"]
+width, height = settings["width"], settings["height"]
+try:
+    pytesseract.pytesseract.tesseract_cmd = settings["tesseract_cmd_path"]
+except pytesseract.TesseractNotFoundError as e:
+    sys.exit(f"{e}, {settings["tesseract_cmd_path"]}")
+except FileNotFoundError as e:
+    sys.exit(f"{e}, {settings["tesseract_cmd_path"]}")
+get_answer_key = settings["get_answer_key"]
+exit_key = settings["exit_key"]
 
 
 def GetOCR() -> str:
-    screenshot = ImageGrab.grab()
-    # img1 = img.crop((672, 200, 600, 50))
-    img_cropped = screenshot.crop(
-        (x_start, y_start, x_start+x_size, y_start+y_size))
-    img_arr = np.array(img_cropped)
+    """_summary_
+
+    Returns:
+        str: _string of the question_
+    """
+    screenshot: Image = ImageGrab.grab()
+    img_cropped: Image = screenshot.crop(
+        (x_start, y_start, x_start+width, y_start+height))
+    img_arr: npt.ArrayLike = np.array(img_cropped)
     ocr_res: str = pytesseract.image_to_string(img_arr)
     ocr_res = ocr_res.lower()
-    data = ocr_res.split("\n", 1)[0]
+    data: str = ocr_res.split("\n", 1)[0]
     return data
 
 
 def InsertAnswer() -> None:
+    """_summary_
+    On key press removes the answer key (presses backspace) and reads the answer from data.json file.
+    If there is no answer recorder asks to input through the terminal, if it exists simulates typing it into the text box
+    """
     press('backspace')
     question: str = GetOCR()
     with open("data.json") as f:
@@ -44,10 +64,11 @@ def InsertAnswer() -> None:
 
 
 def Main():
+    print(settings["tesseract_cmd_path"])
     while True:
-        if keyboard.is_pressed("="):
+        if keyboard.is_pressed(get_answer_key):
             InsertAnswer()
-        elif keyboard.is_pressed("esc"):
+        elif keyboard.is_pressed(exit_key):
             sys.exit()
 
 
