@@ -1,5 +1,10 @@
 # InstaLing Odpowiedzi
 
+## Running
+
+1. run the run.bat file
+2. run `py main.py <debug>` (`<debug>` - 0 for normal, 1 for data insertion/correction)
+
 ## Dependencies
 
 - tesseract (python + [tool](https://github.com/UB-Mannheim/tesseract/wiki))

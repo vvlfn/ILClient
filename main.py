@@ -1,6 +1,7 @@
 from difflib import SequenceMatcher
 import json
 import sys
+import time
 from typing import Any, Union
 from PIL import ImageGrab
 from PIL.Image import Image
@@ -40,6 +41,8 @@ def GetOCR() -> str:
     img_arr: npt.ArrayLike = np.array(img_cropped)
     ocr_res: str = pytesseract.image_to_string(img_arr)
     ocr_res = ocr_res.lower()
+    if is_debug:
+        print(ocr_res)
     data: str = ocr_res.split("\n", 1)[0]
     return data
 
@@ -54,37 +57,38 @@ def InsertAnswer() -> None:
     with open("data.json") as f:
         data: dict[str, str] = json.load(f)
         answer: Union[str, None] = None
-    for key in data.keys():
-        similarity: float = SequenceMatcher(None, key, question).ratio()
-        if similarity >= 0.75:
-            print(round(similarity, 2), key, question, sep="\n")
-            answer = data.get(key)
-            while True:
-                try:
-                    choice: int = int(input("Which is better? 1/2: "))
-                    break
-                except ValueError:
-                    continue
-            if choice == 2:
-                data.update({question: answer})  # type: ignore
-                data.pop(key)
-            break
-    else:
-        answer = data.get(question)
-    print(answer)
+    if is_debug:
+        for key in data.keys():
+            similarity: float = SequenceMatcher(None, key, question).ratio()
+            if similarity >= 0.75:
+                print(round(similarity, 2), key, question, sep="\n")
+                answer = data.get(key)
+                choice: str = input("Change 1st key to 2nd key? y/N")
+                if choice.lower() == "y":
+                    data.update({question: answer})  # type: ignore
+                    data.pop(key)
+                    UpdateDataJSON(data)
+                    return None
+                break
+        else:
+            answer = data.get(question)
+        print(f"{answer=}")
     if answer is None:
         new_answer: str = input(f"Input answer for the question {question} ")
         if new_answer == "":
             return None
         data.update({question: new_answer})
-        with open("data.json", "w") as f:
-            json.dump(data, f)
+        UpdateDataJSON(data)
     else:
         typewrite(answer)
 
 
+def UpdateDataJSON(data):
+    with open("data.json", "w") as f:
+        json.dump(data, f, indent=2)
+
+
 def Main():
-    print(settings["tesseract_cmd_path"])
     while True:
         if keyboard.is_pressed(get_answer_key):
             InsertAnswer()
@@ -93,4 +97,5 @@ def Main():
 
 
 if __name__ == "__main__":
+    is_debug: bool = bool(sys.argv[0])
     Main()
