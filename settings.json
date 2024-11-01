@@ -1,9 +1,13 @@
 {
 	"tesseract_cmd_path": ".\\tesseract\\tesseract.exe",
 	"x_start": 0,
-	"y_start": 200,
-	"width": 1500,
-	"height": 150,
+	"y_start": 195,
+	"width": 1920,
+	"height": 100,
 	"get_answer_key": "=",
-	"exit_key": "esc"
+	"exit_key": "esc",
+	"enter_delay": 0.15,
+	"typing_base_delay": 0.01,
+	"typing_lower_multiplier": 1,
+	"typing_upper_multiplier": 4
 }
