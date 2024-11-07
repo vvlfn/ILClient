@@ -1,13 +1,16 @@
-# [InstaLing Answers](https://instaling.pl/teacher.php?page=login)
+# InstaLing Answers
 
 ## Installation
 
-1. Install tesseract tool from [this github repo](https://github.com/UB-Mannheim/tesseract/wiki)
-2. Run the installator and set the path to this directory with `\tesseract` at the end (optional but if different change `settings.json` `'tesseract_cmd_path'` value to path to tesseract.exe)
-3. Set up virtual environment in this directory (folder name should be `.venv`)
-4. Install dependencies with `pip install pillow numpy pytesseract pyautogui keyboard`
-5. In cmd run `run.bat` file and then `py main.py -p` and adjust `x_start`, `y_start`, `width` and `height` to get only the text in the cropped img
-6. run `py main.py` without any arguments and press the `get_answer_key` to input answers (if no answer is found input into the terminal)
+1. Run `setup.bat`
+2. Install the latest release of tesseract
+3. Install tesseract into the repo directory (path will be like `<path to this dir>\tesseract`)
+
+## Usage
+
+1. run `run.bat`
+2. press `=`
+3. :)
 
 ## Dependencies
 
@@ -30,4 +33,3 @@
 - `'typing_base_delay'` - typing base delay between letter presses
 - `'typing_lower_multiplier'` - typing multiplier lower bound
 - `'typing_upper_multiplier'` - typing multiplier upper bound
-

@@ -2,3 +2,4 @@ tesseract
 .venv
 .mypy_cache
 data.json
+.vscode
