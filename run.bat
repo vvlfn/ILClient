@@ -1,4 +1,3 @@
-@REM @echo off
-cd /D "%~dp0"
-.\.venv\Scripts\activate.bat
-python .\main.py -h
+@echo off
+cd /d .
+.venv\Scripts\activate.bat && python .\main.py

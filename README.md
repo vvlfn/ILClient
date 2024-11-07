@@ -20,10 +20,10 @@
 ## Settings
 
 - `'tesseract_cmd_path'` - relative/absolute path to tesseract.exe file
-- `'x_start'` - distance from the left side of the screen to the text box
-- `'y_start'` - distance from the top of the screen to the text box
-- `'width'` - width of the text box
-- `'height'` - height of the text box
+- `'abx_start'` - (ab = answer box) distance from the left side of the screen to the answer box
+- `'aby_start'` - (ab = answer box) distance from the top of the screen to the answer box
+- `'ab_width'` - (ab = answer box) width of the answer box
+- `'ab_height'` - (ab = answer box) height of the answer box
 - `'get_answer_key'` - key to get answer and type it in
 - `'exit_key'` - key to close the program
 - `'enter_delay'` - delay between first and second enter press

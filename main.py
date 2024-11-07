@@ -117,11 +117,9 @@ def UpdateDataJSON(data):
 
 
 def Main():
+    if not os.path.isfile("data.json"):
+        open("data.json", "w").close()
     while True:
-        # os.system('cls')
-        # print(f"Press {get_answer_key} to insert answer or {
-        #       exit_key} to exit the program")
-        # keyboard.read_key()
         if keyboard.is_pressed(get_answer_key):
             InsertAnswer()
         elif keyboard.is_pressed(exit_key):
