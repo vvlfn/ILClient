@@ -1,4 +1,4 @@
-# InstaLing Answers
+# [InstaLing Answers](https://instaling.pl/teacher.php?page=login)
 
 ## Installation
 
@@ -30,3 +30,4 @@
 - `'typing_base_delay'` - typing base delay between letter presses
 - `'typing_lower_multiplier'` - typing multiplier lower bound
 - `'typing_upper_multiplier'` - typing multiplier upper bound
+
