@@ -22,6 +22,10 @@ from pyautogui import typewrite, press
 from il_client import ILClient
 
 
+# TODO
+# *- skip new words
+# *- insert answers auitomatically
+
 def Main() -> None:
     """
     Load Settings
@@ -40,7 +44,8 @@ def Main() -> None:
         action="store_true",
     )
     args = parser.parse_args()
-    il_client: ILClient = ILClient(settings, os.path.join("data.json"), args)
+    il_client: ILClient = ILClient(settings, os.path.join(
+        "data.json"), show_image=args.show_image)
 
     """
     Main Loop

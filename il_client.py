@@ -20,10 +20,10 @@ from pyautogui import typewrite, press
 
 class ILClient:
     def __init__(
-        self, settings: dict[str, Any], data_path: str, args: argparse.Namespace
+        self, settings: dict[str, Any], data_path: str, show_image: bool = False
     ) -> None:
         self.data_path: str = data_path
-        self.args = args
+        self.show_image: bool = show_image
 
         # answer box dimensions
         abx_start: int = settings.get("abx_start", 0)
@@ -35,6 +35,17 @@ class ILClient:
             aby_start,
             abx_start + ab_width,
             aby_start + ab_height,
+        )
+        # new answer box dimensions
+        nax_start: int = settings.get("nax_start", 0)
+        nay_start: int = settings.get("nay_start", 0)
+        na_width: int = settings.get("na_width", 0)
+        na_height: int = settings.get("na_height", 0)
+        self.new_answer_bounding_box: tuple[int, int, int, int] = (
+            nax_start,
+            nay_start,
+            nax_start + na_width,
+            nay_start + na_height
         )
 
         # ocr config
@@ -58,14 +69,18 @@ class ILClient:
         print(f"{answer=}")
         # Insert answer or update data
         if answer:
-            self.InsertAnswer(answer)
+            # if answer insert it
+            typewrite(answer)
+            press("enter")
+            time.sleep(self.enter_delay)
+            press("enter")
         else:
-            new_answer: str = input(
-                f"Input answer for question {question=} \n Answer: "
-            )
-            if new_answer:
-                data.update({question: answer})
-                self.UpdateDataFile(data)
+            # if no answer for question, press enter and save the answer given
+            press("enter")
+            new_answer: str = self.RunOCR(self.new_answer_bounding_box)
+            new_record: dict[str, str] = {question: new_answer}
+            self.UpdateDataFile(new_record)
+            press("enter")
 
     def GetAnswer(self, question: str, data: dict[str, str]) -> str | None:
         # load data
@@ -81,8 +96,10 @@ class ILClient:
                 answer = data.get(question, None)
                 if answer:
                     return answer
+        else:
+            return None
 
-    def RunOCR(self, bounding_box: tuple[int, int, int, int]) -> Any:
+    def RunOCR(self, bounding_box: tuple[int, int, int, int]) -> str:
         """Takes a screenshot, crops it and runs OCR on it.
         Args:
             bounding_box (tuple[int, int, int, int]): Bounding Box of the ocr image (x_start, y_start, width, height)
@@ -94,32 +111,23 @@ class ILClient:
         cropped_screenshot: Image = screenshot.crop(bounding_box)
 
         # if argument -img inserted then show image
-        if self.args.show_image:
+        if self.show_image:
             cropped_screenshot.show("Cropped Screenshot")
 
         # Image -> numpy array
         ocr_data: npt.ArrayLike = np.array(cropped_screenshot)
         # get ocr string and turn it lowercase
-        ocr_result: str = pytesseract.image_to_string(ocr_data, lang="eng").lower()
+        ocr_result: str = pytesseract.image_to_string(
+            ocr_data, lang="eng").lower()
         # replace underscores
         ocr_result = ocr_result.replace("_", " ")
         # remove multi whitespace, multiple spaces next to eachother
         ocr_result = " ".join(ocr_result.strip().split())
 
-        output = ocr_result.split("\n")
+        output: list[str] = ocr_result.split("\n")
 
         print(*output, "\n-")
-
-    def InsertAnswer(self, answer: str) -> None:
-        """Types in the string provided and presses enter twice with a delay between
-        Args:
-            answer (str): Answer string to simulate typing
-        """
-        typewrite(answer)
-
-        press("enter")
-        time.sleep(self.enter_delay)
-        press("enter")
+        return output[0]
 
     def UpdateDataFile(self, data: dict[str, str]) -> None:
         """Insert the updated data dictionary into the data.json file
@@ -127,22 +135,17 @@ class ILClient:
         Args:
             data (dict[str, str]): dictionary of questions and answers
         """
+        with open(self.data_path, "r") as f:
+            settings: dict[str, str] = json.load(f)
+            settings.update(data)
         with open(self.data_path, "w") as f:
-            json.dump(data, f, indent=2)
+            json.dump(settings, f, indent=2)
 
 
 if __name__ == "__main__":
-    parser: argparse.ArgumentParser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-img",
-        "--show_image",
-        help="Show cropped image from screenshot",
-        action="store_true",
-    )
-    args = parser.parse_args()
     with open("settings.json") as f:
         settings: dict[str, Any] = json.load(f)
-    il_client: ILClient = ILClient(settings, "data.json", args)
+    il_client: ILClient = ILClient(settings, "data.json", show_image=True)
 #          ___..._
 #     _,--'       "`-.
 #   ,'.  .            \
