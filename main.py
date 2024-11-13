@@ -53,7 +53,8 @@ def Main() -> None:
 
     while True:
         if keyboard.is_pressed(execute_key):
-            il_client()
+            # il_client()
+            il_client.AutoComplete()
         elif keyboard.is_pressed(exit_key):
             sys.exit(0)
 

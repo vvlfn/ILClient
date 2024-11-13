@@ -82,6 +82,11 @@ class ILClient:
             self.UpdateDataFile(new_record)
             press("enter")
 
+    def AutoComplete(self) -> None:
+        while self.RunOCR(self.answer_bounding_box).split()[0][:10:] != "gratulacje":
+            self.__call__()
+            time.sleep(0.1)
+
     def GetAnswer(self, question: str, data: dict[str, str]) -> str | None:
         # load data
         for key in data.keys():
@@ -146,6 +151,8 @@ if __name__ == "__main__":
     with open("settings.json") as f:
         settings: dict[str, Any] = json.load(f)
     il_client: ILClient = ILClient(settings, "data.json", show_image=True)
+    response = il_client.RunOCR(il_client.answer_bounding_box).split()[0][:10:]
+    print(response)
 #          ___..._
 #     _,--'       "`-.
 #   ,'.  .            \
