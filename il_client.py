@@ -59,9 +59,7 @@ class ILClient:
         self.enter_delay: float = settings.get("enter_delay", 0.3)
 
     def __call__(self) -> None:
-        # remove keybind key in text box
-        press("backspace")
-
+        print("\n", "-"*15)
         question = self.RunOCR(self.answer_bounding_box)
         with open(self.data_path, "r") as f:
             data: dict[str, str] = json.load(f)
@@ -81,11 +79,14 @@ class ILClient:
             new_record: dict[str, str] = {question: new_answer}
             self.UpdateDataFile(new_record)
             press("enter")
+        print("-"*15)
 
     def AutoComplete(self) -> None:
-        while self.RunOCR(self.answer_bounding_box).split()[0][:10:] != "gratulacje":
+        while self.RunOCR(self.answer_bounding_box, False).split()[0][:10:] != "gratulacje":
             self.__call__()
-            time.sleep(0.1)
+            time.sleep(0.05)
+        print("Finished a session!")
+        press("enter")
 
     def GetAnswer(self, question: str, data: dict[str, str]) -> str | None:
         # load data
@@ -104,7 +105,7 @@ class ILClient:
         else:
             return None
 
-    def RunOCR(self, bounding_box: tuple[int, int, int, int]) -> str:
+    def RunOCR(self, bounding_box: tuple[int, int, int, int], print_result: bool = True) -> str:
         """Takes a screenshot, crops it and runs OCR on it.
         Args:
             bounding_box (tuple[int, int, int, int]): Bounding Box of the ocr image (x_start, y_start, width, height)
@@ -130,8 +131,8 @@ class ILClient:
         ocr_result = " ".join(ocr_result.strip().split())
 
         output: list[str] = ocr_result.split("\n")
-
-        print(*output, "\n-")
+        if print_result:
+            print(f"ocr result='{''.join(output)}'")
         return output[0]
 
     def UpdateDataFile(self, data: dict[str, str]) -> None:
