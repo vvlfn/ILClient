@@ -38,14 +38,26 @@ class ILClient:
         )
         # new answer box dimensions
         nax_start: int = settings.get("nax_start", 0)
-        nay_start: int = settings.get("nay_start", 0)
-        na_width: int = settings.get("na_width", 0)
-        na_height: int = settings.get("na_height", 0)
+        nay_start: int = settings.get("nay_start", 195)
+        na_width: int = settings.get("na_width", 1920)
+        na_height: int = settings.get("na_height", 100)
         self.new_answer_bounding_box: tuple[int, int, int, int] = (
             nax_start,
             nay_start,
             nax_start + na_width,
             nay_start + na_height
+        )
+
+        # end bounding box dimensions (only for checking if the session is over when "gratulacje" is read)
+        endx_start: int = settings.get("endx_start", 0)
+        endy_start: int = settings.get("endy_start", 250)
+        end_width: int = settings.get("end_width", 1920)
+        end_height: int = settings.get("end_height", 100)
+        self.end_bounding_box: tuple[int, int, int, int] = (
+            endx_start,
+            endy_start,
+            endx_start + end_width,
+            endy_start + end_height
         )
 
         # ocr config
@@ -57,6 +69,7 @@ class ILClient:
 
         # delays
         self.enter_delay: float = settings.get("enter_delay", 0.3)
+        self.call_delay: float = settings.get("call_delay", 0.05)
 
     def __call__(self) -> None:
         print("\n", "-"*15)
@@ -82,9 +95,9 @@ class ILClient:
         print("-"*15)
 
     def AutoComplete(self) -> None:
-        while self.RunOCR(self.answer_bounding_box, False).split()[0][:10:] != "gratulacje":
+        while self.RunOCR(self.end_bounding_box, False).split()[0][:10:] != "gratulacje":
             self.__call__()
-            time.sleep(0.05)
+            time.sleep(self.call_delay)
         print("Finished a session!")
         press("enter")
 
@@ -92,7 +105,7 @@ class ILClient:
         # load data
         for key in data.keys():
             similarity: float = SequenceMatcher(None, key, question).ratio()
-            if similarity >= 0.90:
+            if similarity >= 0.85:
                 # ocr result is similar enough to existing -> get the existing key's answer and return
                 answer = data.get(key, None)
                 if answer:

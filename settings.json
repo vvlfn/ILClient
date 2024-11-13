@@ -15,7 +15,5 @@
 	"get_answer_key": "=",
 	"exit_key": "esc",
 	"enter_delay": 0.15,
-	"typing_base_delay": 0.01,
-	"typing_lower_multiplier": 1,
-	"typing_upper_multiplier": 4
+	"call_delay": 0.05
 }

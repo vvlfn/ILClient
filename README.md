@@ -9,8 +9,9 @@
 ## Usage
 
 1. run `run.bat`
-2. press `=`
+2. press `=` by default
 3. :)
+4. if something happens press `esc` by default
 
 ## Dependencies
 
@@ -27,6 +28,8 @@
 - `'aby_start'` - (ab = answer box) distance from the top of the screen to the answer box
 - `'ab_width'` - (ab = answer box) width of the answer box
 - `'ab_height'` - (ab = answer box) height of the answer box
+- `an_x ...` - (answer) the same 4 parameters as with the answer box
+- `end_x ...` - (end) the same 4 parameters as with the answer box
 - `'get_answer_key'` - key to get answer and type it in
 - `'exit_key'` - key to close the program
 - `'enter_delay'` - delay between first and second enter press
