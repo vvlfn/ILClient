@@ -46,12 +46,15 @@ def Main() -> None:
     )
     args = parser.parse_args()
     il_client: ILClient = ILClient(
-        settings, os.path.join("data.json"), show_image=args.show_image
+        settings, os.path.join("new_data.json"), show_image=args.show_image
     )
+
     print(
-        f"Program ready, complete a session by pressing `{execute_key}` or exit the program by pressing `{exit_key}`"
+        f"Program ready, complete a session by pressing `{
+            execute_key}` or exit the program by pressing `{exit_key}`"
     )
     """
+    
     Main Loop
     """
 
@@ -61,6 +64,8 @@ def Main() -> None:
             press("backspace")
             # il_client()
             il_client.AutoComplete()
+        elif keyboard.is_pressed("\\"):
+            il_client.AutoLogin()
         elif keyboard.is_pressed(exit_key):
             sys.exit(0)
 

@@ -3,19 +3,19 @@ Import dependencies
 """
 
 from difflib import SequenceMatcher
+import os
 from typing import Any, Union
 import json
-import os
 import time
 from PIL import ImageGrab
 from PIL.Image import Image
+import keyboard
 import numpy as np
 import numpy.typing as npt
-import argparse
-
+import pyperclip
 # mypy stubs :c
 import pytesseract  # type: ignore
-from pyautogui import typewrite, press
+from pyautogui import typewrite, press, hotkey, click  # type: ignore
 
 
 class ILClient:
@@ -23,6 +23,10 @@ class ILClient:
         self, settings: dict[str, Any], data_path: str, show_image: bool = False
     ) -> None:
         self.data_path: str = data_path
+        if not os.path.isdir(self.data_path):
+            with open(self.data_path, "w") as f:
+                json.dump({}, f, indent=2)
+
         self.show_image: bool = show_image
 
         # answer box dimensions
@@ -94,12 +98,58 @@ class ILClient:
             press("enter")
         print("-"*15)
 
+    def NewAlgorithm(self) -> None:
+        """Get question by triple clicking the line and saves it, then gets answer from that inputs
+        """
+        question: str = self.TripleClick(200)
+        with open(self.data_path, "r") as f:
+            data: dict[str, str] = json.load(f)
+        answer: Union[str, None] = data.get(question, None)
+        click(500, 500)
+        if answer:
+            typewrite(answer)
+            press("enter")
+            time.sleep(self.enter_delay)
+            press("enter")
+        else:
+            press("enter")
+            new_answer: str = self.TripleClick(300)
+            self.UpdateDataFile({question: new_answer})
+            press("enter")
+
     def AutoComplete(self) -> None:
         while self.RunOCR(self.end_bounding_box, False).split()[0][:10:] != "gratulacje":
-            self.__call__()
+            if keyboard.is_pressed("esc"):
+                print("Exiting autocompleting.")
+                break
+            # self.__call__()
+            self.NewAlgorithm()
             time.sleep(self.call_delay)
-        print("Finished a session!")
-        press("enter")
+        else:
+            print("Finished a session!")
+        # press("enter")
+
+    def TripleClick(self, y: int) -> str:
+        click(100, y, 3)
+        hotkey('ctrl', 'c')
+        output: str = pyperclip.paste()
+        return output
+
+    def AutoLogin(self) -> None:
+        with open("credentials.json", "r") as f:
+            credentials: dict[str, str] = json.load(f)
+        for login in credentials.keys():
+            hotkey("ctrl", "shift", "n")
+            time.sleep(0.5)
+            typewrite("https://instaling.pl/teacher.php?page=login")
+            press("enter")
+            time.sleep(3)
+            typewrite(login)
+            press('tab')
+            typewrite(credentials.get(login))
+            time.sleep(0.1)
+            press("enter")
+            # now at the main page
 
     def GetAnswer(self, question: str, data: dict[str, str]) -> str | None:
         # load data
