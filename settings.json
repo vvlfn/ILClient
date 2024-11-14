@@ -1,5 +1,5 @@
 {
-	"tesseract_cmd_path": ".\\tesseract\\tesseract.exe",
+	"tesseract_cmd_path": "C:\\Program Files\\Tesseract-OCR\\tesseract.exe",
 	"abx_start": 0,
 	"aby_start": 195,
 	"ab_width": 1920,

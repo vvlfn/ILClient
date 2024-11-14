@@ -4,14 +4,14 @@
 
 1. Run `setup.bat`
 2. Install the latest release of tesseract
-3. Install tesseract into the repo directory (path will be like `<path to this dir>\tesseract`)
+3. Install tesseract into `Program Files` (just click through :3)
 
 ## Usage
 
 1. run `run.bat`
 2. press `=` by default
-3. :)
-4. if something happens press `esc` by default
+3. if something happens press `esc` by default  
+4. :)
 
 ## Dependencies
 

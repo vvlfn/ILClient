@@ -3,3 +3,4 @@ tesseract
 .mypy_cache
 .vscode
 __pycache__
+installer.exe
