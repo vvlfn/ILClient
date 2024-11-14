@@ -26,6 +26,7 @@ from il_client import ILClient
 # *- skip new words
 # *- insert answers auitomatically
 
+
 def Main() -> None:
     """
     Load Settings
@@ -44,9 +45,12 @@ def Main() -> None:
         action="store_true",
     )
     args = parser.parse_args()
-    il_client: ILClient = ILClient(settings, os.path.join(
-        "data.json"), show_image=args.show_image)
-
+    il_client: ILClient = ILClient(
+        settings, os.path.join("data.json"), show_image=args.show_image
+    )
+    print(
+        f"Program ready, complete a session by pressing `{execute_key}` or exit the program by pressing `{exit_key}`"
+    )
     """
     Main Loop
     """
@@ -62,4 +66,17 @@ def Main() -> None:
 
 
 if __name__ == "__main__":
+    print(
+        """
+██▒   █▓ ██▒   █▓ ██▓      █████▒███▄    █ 
+▓██░   █▒▓██░   █▒▓██▒    ▓██   ▒ ██ ▀█   █ 
+ ▓██  █▒░ ▓██  █▒░▒██░    ▒████ ░▓██  ▀█ ██▒
+  ▒██ █░░  ▒██ █░░▒██░    ░▓█▒  ░▓██▒  ▐▌██▒
+   ▒▀█░     ▒▀█░  ░██████▒░▒█░   ▒██░   ▓██░
+   ░ ▐░     ░ ▐░  ░ ▒░▓  ░ ▒ ░   ░ ▒░   ▒ ▒ 
+   ░ ░░     ░ ░░  ░ ░ ▒  ░ ░     ░ ░░   ░ ▒░
+     ░░       ░░    ░ ░    ░ ░      ░   ░ ░ 
+      ░        ░      ░  ░                ░ 
+     ░        ░                             """
+    )
     Main()
