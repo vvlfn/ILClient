@@ -12,7 +12,7 @@ from PIL.Image import Image
 import keyboard
 import numpy as np
 import numpy.typing as npt
-import pyperclip
+import pyperclip  # type: ignore
 # mypy stubs :c
 import pytesseract  # type: ignore
 from pyautogui import typewrite, press, hotkey, click  # type: ignore
@@ -23,7 +23,7 @@ class ILClient:
         self, settings: dict[str, Any], data_path: str, show_image: bool = False
     ) -> None:
         self.data_path: str = data_path
-        if not os.path.isdir(self.data_path):
+        if not os.path.isfile(self.data_path):
             with open(self.data_path, "w") as f:
                 json.dump({}, f, indent=2)
 
@@ -64,6 +64,9 @@ class ILClient:
             endy_start + end_height
         )
 
+        self.question_height = settings.get("question_height", 200)
+        self.answer_height = settings.get("answer_height", 300)
+
         # ocr config
         pytesseract.pytesseract.tesseract_cmd = settings["tesseract_cmd_path"]
 
@@ -101,24 +104,24 @@ class ILClient:
     def NewAlgorithm(self) -> None:
         """Get question by triple clicking the line and saves it, then gets answer from that inputs
         """
-        question: str = self.TripleClick(200)
+        question: str = self.TripleClick(self.question_height)
         with open(self.data_path, "r") as f:
             data: dict[str, str] = json.load(f)
-        answer: Union[str, None] = data.get(question, None)
+        answer: str = data.get(question, "")
         click(500, 500)
-        if answer:
+        if answer != "":
             typewrite(answer)
             press("enter")
             time.sleep(self.enter_delay)
             press("enter")
         else:
             press("enter")
-            new_answer: str = self.TripleClick(300)
+            new_answer: str = self.TripleClick(self.answer_height)
             self.UpdateDataFile({question: new_answer})
             press("enter")
 
     def AutoComplete(self) -> None:
-        while self.RunOCR(self.end_bounding_box, False).split()[0][:10:] != "gratulacje":
+        while self.TripleClick(self.question_height)[:10:] != "Gratulacje":
             if keyboard.is_pressed("esc"):
                 print("Exiting autocompleting.")
                 break
@@ -132,7 +135,7 @@ class ILClient:
     def TripleClick(self, y: int) -> str:
         click(100, y, 3)
         hotkey('ctrl', 'c')
-        output: str = pyperclip.paste()
+        output: str = pyperclip.paste().strip()
         return output
 
     def AutoLogin(self) -> None:
@@ -146,7 +149,7 @@ class ILClient:
             time.sleep(3)
             typewrite(login)
             press('tab')
-            typewrite(credentials.get(login))
+            typewrite(credentials.get(login, ""))
             time.sleep(0.1)
             press("enter")
             # now at the main page

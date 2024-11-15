@@ -12,6 +12,8 @@
 	"endy_start": 250,
 	"end_width": 1920,
 	"end_height": 100,
+	"question_height": 200,
+	"answer_height": 300,
 	"get_answer_key": "=",
 	"exit_key": "esc",
 	"enter_delay": 0.15,
