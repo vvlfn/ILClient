@@ -117,10 +117,13 @@ class ILClient:
         else:
             press("enter")
             new_answer: str = self.TripleClick(self.answer_height)
-            self.UpdateDataFile({question: new_answer})
+            if not new_answer[:21:] == "Teraz bez dodatkowego":
+                self.UpdateDataFile({question: new_answer})
             press("enter")
 
     def AutoComplete(self) -> None:
+        # from the main page get to the actual excercise page
+
         while self.TripleClick(self.question_height)[:10:] != "Gratulacje":
             if keyboard.is_pressed("esc"):
                 print("Exiting autocompleting.")
@@ -130,6 +133,7 @@ class ILClient:
             time.sleep(self.call_delay)
         else:
             print("Finished a session!")
+            press("enter")
         # press("enter")
 
     def TripleClick(self, y: int) -> str:
@@ -152,7 +156,15 @@ class ILClient:
             typewrite(credentials.get(login, ""))
             time.sleep(0.1)
             press("enter")
+            time.sleep(1)
             # now at the main page
+            # get to the excercise
+            for rep in range(4):
+                click(960, 700)
+                time.sleep(1)
+                click(960, 600)
+                self.AutoComplete()
+                time.sleep(1)
 
     def GetAnswer(self, question: str, data: dict[str, str]) -> str | None:
         # load data
