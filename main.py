@@ -2,21 +2,17 @@
 Import dependencies
 """
 
-from difflib import SequenceMatcher
 from typing import Any, Union
 import json
 import os
 import sys
 import time
 import argparse
-from PIL import ImageGrab
-from PIL.Image import Image
 import keyboard
 import numpy as np
 import numpy.typing as npt
 
-# mypy stubs :c
-import pytesseract  # type: ignore
+# mypy stubs :c=
 from pyautogui import typewrite, press
 
 from il_client import ILClient
@@ -44,9 +40,12 @@ def Main() -> None:
         help="Show cropped image from screenshot",
         action="store_true",
     )
+    parser.add_argument("-config", "--set_coordinates",
+                        help="Set coordinates of mouse clicks", action="store_true")
     args = parser.parse_args()
+
     il_client: ILClient = ILClient(
-        settings, os.path.join("new_data.json"), show_image=args.show_image
+        settings, os.path.join("data.json"), show_image=args.show_image, config=args.set_coordinates
     )
 
     print(
