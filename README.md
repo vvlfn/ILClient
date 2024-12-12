@@ -6,7 +6,9 @@
 
 1. Run `setup.bat`
 2. Run `run_config.bat` and press `\` in the correct spots
+![Explaination of coordinates](coordinates.png)
 3. Done
+
 
 ## Usage
 
