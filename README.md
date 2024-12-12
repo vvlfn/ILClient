@@ -1,38 +1,33 @@
 # InstaLing Answers
 
+![Instaling icon](https://instaling.pl/marketing/static/assets/InstaLing_face.svg)
+
 ## Installation
 
 1. Run `setup.bat`
-2. Install the latest release of tesseract
-3. Install tesseract into `Program Files` (just click through :3)
+2. Run `run_config.bat` and press `\` in the correct spots
+3. Done
 
 ## Usage
 
 1. run `run.bat`
-2. press `=` by default
-3. if something happens press `esc` by default  
-4. :)
+2. press `=` to start autocompleting
+3. if something happens press `esc`  
 
 ## Dependencies
 
-- tesseract ([python](https://pypi.org/project/pytesseract/) + [tool](https://github.com/UB-Mannheim/tesseract/wiki))
-- [pillow](https://pypi.org/project/pillow/)
-- [numpy](https://pypi.org/project/numpy/)
-- [keyboard](https://pypi.org/project/keyboard/)
-- [pyautogui](https://pypi.org/project/PyAutoGUI/)
+- [python](https://www.python.org/) (download manually, rest is downloaded automatically)
+    - [numpy](https://pypi.org/project/numpy/)
+    - [keyboard](https://pypi.org/project/keyboard/)
+    - [pyautogui](https://pypi.org/project/PyAutoGUI/)
 
 ## Settings
 
-- `'tesseract_cmd_path'` - relative/absolute path to tesseract.exe file
-- `'abx_start'` - (ab = answer box) distance from the left side of the screen to the answer box
-- `'aby_start'` - (ab = answer box) distance from the top of the screen to the answer box
-- `'ab_width'` - (ab = answer box) width of the answer box
-- `'ab_height'` - (ab = answer box) height of the answer box
-- `an_x ...` - (answer) the same 4 parameters as with the answer box
-- `end_x ...` - (end) the same 4 parameters as with the answer box
-- `'get_answer_key'` - key to get answer and type it in
-- `'exit_key'` - key to close the program
-- `'enter_delay'` - delay between first and second enter press
-- `'typing_base_delay'` - typing base delay between letter presses
-- `'typing_lower_multiplier'` - typing multiplier lower bound
-- `'typing_upper_multiplier'` - typing multiplier upper bound
+- `start_button_coordinates` - `[x,y]` of the start button, change with `run_config.bat`
+- `question_coordinates` - `[x,y]` of the question text, change with `run_config.bat`
+- `answer_coordinates` - `[x,y]` of the answer box, change with `run_config.bat`
+- `save_coordinates_key` - `\` by default
+- `get_answer_key` - `=` by default
+- `exit_key` - `esc` by default
+- `enter_delay` - delay between enter inputs
+- `call_delay` - delay between every complete of question
