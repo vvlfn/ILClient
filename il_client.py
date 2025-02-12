@@ -7,17 +7,17 @@ import os
 from typing import Any, Union
 import json
 import time
-import keyboard
+import keyboard  # type: ignore
 import numpy as np
 import numpy.typing as npt
 import pyperclip  # type: ignore
 # mypy stubs :c
-from pyautogui import typewrite, press, hotkey, click  # type: ignore
+from pyautogui import hotkey, press, typewrite, position, click  # type: ignore
 
 
 class ILClient:
     def __init__(
-        self, settings: dict[str, Any], data_path: str, show_image: bool = False, config: bool = False
+        self, settings: dict[str, Any], data_path: str, config: bool = False
     ) -> None:
         self.data_path: str = data_path
         if not os.path.isfile(self.data_path):
@@ -45,7 +45,25 @@ class ILClient:
 
     def SetCoordinates(self) -> None:
         # TODO: hover over specific place and press key '=' to save coordinates
-        pass
+        print("Hover over the question input box and press '='")
+        while True:
+            if keyboard.is_pressed("="):
+                self.question_coordinates = tuple(position())
+                print("Question coordinates saved!")
+                break
+        print("Hover over the answer input box and press '='")
+        while True:
+            if keyboard.is_pressed("="):
+                self.answer_coordinates = tuple(position())
+                print("Answer coordinates saved!")
+                break
+        # TODO: save coordinates to settings.json
+        with open("settings.json", "r") as f:
+            settings: dict[str, Any] = json.load(f)
+        settings["question_coordinates"] = list(self.question_coordinates)
+        settings["answer_coordinates"] = list(self.answer_coordinates)
+        with open("settings.json", "w") as f:
+            json.dump(settings, f, indent=2)
 
     def __call__(self) -> None:
         """Get question by triple clicking the line and saves it, then gets answer from that inputs
@@ -88,29 +106,11 @@ class ILClient:
         output: str = pyperclip.paste().strip()
         return output
 
-    def AutoLogin(self) -> None:
-        with open("credentials.json", "r") as f:
-            credentials: dict[str, str] = json.load(f)
-        for login in credentials.keys():
-            hotkey("ctrl", "shift", "n")
-            time.sleep(0.5)
-            typewrite("https://instaling.pl/teacher.php?page=login")
-            press("enter")
-            time.sleep(3)
-            typewrite(login)
-            press('tab')
-            typewrite(credentials.get(login, ""))
-            time.sleep(0.1)
-            press("enter")
-            time.sleep(1)
-            # now at the main page
-            # get to the excercise
-            for rep in range(4):
-                click(960, 700)
-                time.sleep(1)
-                click(960, 600)
-                self.AutoComplete()
-                time.sleep(1)
+    def StartSession(self) -> None:
+        press("tab", 3, 0.1)
+        press("enter")
+        time.sleep(0.3)
+        click(*self.answer_coordinates)
 
     def UpdateDataFile(self, data: dict[str, str]) -> None:
         """Insert the updated data dictionary into the data.json file

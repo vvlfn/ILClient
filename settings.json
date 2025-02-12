@@ -5,5 +5,7 @@
 	"get_answer_key": "=",
 	"exit_key": "esc",
 	"enter_delay": 0.15,
-	"call_delay": 0.05
+	"call_delay": 0.05,
+	"login": "<insert your login>",
+	"password": "<insert your password>"
 }

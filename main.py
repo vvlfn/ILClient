@@ -8,12 +8,12 @@ import os
 import sys
 import time
 import argparse
-import keyboard
+import keyboard  # type: ignore
 import numpy as np
 import numpy.typing as npt
 
 # mypy stubs :c=
-from pyautogui import typewrite, press
+from pyautogui import typewrite, press  # type: ignore
 
 from il_client import ILClient
 
@@ -34,18 +34,12 @@ def Main() -> None:
     exit_key: str = settings.get("exit_key", "esc")
 
     parser: argparse.ArgumentParser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-img",
-        "--show_image",
-        help="Show cropped image from screenshot",
-        action="store_true",
-    )
     parser.add_argument("-config", "--set_coordinates",
                         help="Set coordinates of mouse clicks", action="store_true")
     args = parser.parse_args()
 
     il_client: ILClient = ILClient(
-        settings, os.path.join("data.json"), show_image=args.show_image, config=args.set_coordinates
+        settings, os.path.join("data.json"), config=args.set_coordinates
     )
 
     print(
@@ -64,7 +58,7 @@ def Main() -> None:
             # il_client()
             il_client.AutoComplete()
         elif keyboard.is_pressed("\\"):
-            il_client.AutoLogin()
+            il_client.StartSession()
         elif keyboard.is_pressed(exit_key):
             sys.exit(0)
 
