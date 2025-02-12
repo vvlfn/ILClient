@@ -32,6 +32,8 @@ class ILClient:
             settings.get("answer_coordinates", [100, 300]))
         self.start_button_coordinates: tuple[int, int] = tuple(
             settings.get("start_button_coordinates", [500, 500]))
+        self.login: str = settings.get("login", "")
+        self.password: str = settings.get("password", "")
 
         # keybinds
         self.get_answer_key: str = settings.get("get_answer_key", "=")
@@ -107,10 +109,26 @@ class ILClient:
         return output
 
     def StartSession(self) -> None:
+        # Open incognito new page, go to login screen, login and go to main screen
+        hotkey("ctrl", "shift", "n")
+        typewrite("https://instaling.pl/teacher.php?page=login", 0)
+        time.sleep(1)
+        press("enter")
+        time.sleep(2)
+        typewrite(self.login)
+        time.sleep(0.3)
+        press("tab")
+        time.sleep(0.3)
+        typewrite(self.password)
+        press("enter")
+        time.sleep(1)
+        # press tab 3 times and start session
         press("tab", 3, 0.1)
         press("enter")
         time.sleep(0.3)
         click(*self.answer_coordinates)
+        time.sleep(0.3)
+        self.AutoComplete()
 
     def UpdateDataFile(self, data: dict[str, str]) -> None:
         """Insert the updated data dictionary into the data.json file

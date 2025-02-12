@@ -1,8 +1,5 @@
-tesseract
 .venv
 .mypy_cache
 .vscode
 __pycache__
-installer.exe
-credentials.json
-new_data.json
+settings.json
