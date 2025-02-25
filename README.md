@@ -12,7 +12,7 @@
 
 ## Usage
 
-1. run `run.bat`
+1. run `run_normal.bat`
 2. press `=` to start autocompleting
 3. if something happens press `esc`  
 
