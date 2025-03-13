@@ -6,6 +6,9 @@ from datetime import datetime
 class DateHandler:
     def __init__(self, file_path: str = "./data/dates.json") -> None:
         self.data_path: str = file_path
+        if not os.path.exists(self.data_path):
+            with open(self.data_path, "w") as f:
+                json.dump({}, f, indent=2)
         # set self.current_date str
         self.current_date = ""
         self.SetCurrentDate()
