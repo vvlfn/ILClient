@@ -11,6 +11,7 @@ import keyboard  # type: ignore
 import numpy as np
 import numpy.typing as npt
 import pyperclip  # type: ignore
+
 # mypy stubs :c
 from pyautogui import hotkey, press, typewrite, position, click  # type: ignore
 
@@ -27,11 +28,14 @@ class ILClient:
         # self.question_height = settings.get("question_height", 200)
         # self.answer_height = settings.get("answer_height", 300)
         self.question_coordinates: tuple[int, int] = tuple(
-            settings.get("question_coordinates", [100, 200]))
+            settings.get("question_coordinates", [100, 200])
+        )
         self.answer_coordinates: tuple[int, int] = tuple(
-            settings.get("answer_coordinates", [100, 300]))
+            settings.get("answer_coordinates", [100, 300])
+        )
         self.start_button_coordinates: tuple[int, int] = tuple(
-            settings.get("start_button_coordinates", [500, 500]))
+            settings.get("start_button_coordinates", [500, 500])
+        )
         self.login: str = settings.get("login", "")
         self.password: str = settings.get("password", "")
 
@@ -68,8 +72,7 @@ class ILClient:
             json.dump(settings, f, indent=2)
 
     def __call__(self) -> None:
-        """Get question by triple clicking the line and saves it, then gets answer from that inputs
-        """
+        """Get question by triple clicking the line and saves it, then gets answer from that inputs"""
         question: str = self.TripleClick(self.question_coordinates)
         with open(self.data_path, "r") as f:
             data: dict[str, str] = json.load(f)
@@ -87,24 +90,23 @@ class ILClient:
                 self.UpdateDataFile({question: new_answer})
             press("enter")
 
-    def AutoComplete(self) -> None:
+    def AutoComplete(self) -> bool:
         # from the main page get to the actual excercise page
-
         while self.TripleClick(self.question_coordinates)[:10:] != "Gratulacje":
             if keyboard.is_pressed("esc"):
                 print("Exiting autocompleting.")
-                break
+                return False
             # self.__call__()
             self.__call__()
             time.sleep(self.call_delay)
         else:
-            print("Finished a session!")
             press("enter")
+            return True
         # press("enter")
 
     def TripleClick(self, coordinates: tuple[int, int]) -> str:
         click(*coordinates, 3)
-        hotkey('ctrl', 'c')
+        hotkey("ctrl", "c")
         output: str = pyperclip.paste().strip()
         return output
 

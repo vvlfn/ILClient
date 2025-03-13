@@ -2,4 +2,5 @@
 .mypy_cache
 .vscode
 __pycache__
-settings.json
+src/__pycache__
+# /data/settings.json

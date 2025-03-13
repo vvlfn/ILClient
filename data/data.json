@@ -254,9 +254,6 @@
   "Why did you ______ her offer?": "reject",
   "Fruit picking is a ________ ___, you won't be able to do it all year round!": "seasonal job",
   "During holidays, he had ______ ____ in Germany.": "casual work",
-  "": "apply for a job",
-  "apply for a job": "take on",
-  "take on": "take on",
   "It's a _______ job, so employee training often takes more than 3 months.": "skilled",
   "_______ in the _______ ________ during holidays is very hard and exhausting.": "work in the tourist industry",
   "A good soldier always _______ ______.": "fulfil duties",
@@ -299,5 +296,7 @@
   "My mum is __ ____, she'll be back around 5 p.m.": "be at work",
   "He's had enough and now dreams of having a ___________ job.": "stress-free",
   "Then she took a ____________ job as a criminal defense attorney.": "high-powered",
-  "I'm going to __ my _________ until you get this thing working again.": "do paperwork"
+  "I'm going to __ my _________ until you get this thing working again.": "do paperwork",
+  "except IndexError:\r\n            self.last_date: str = list(self.data.keys())[-1]": "",
+  "": ""
 }

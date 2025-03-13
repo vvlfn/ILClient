@@ -6,6 +6,6 @@
 	"exit_key": "esc",
 	"enter_delay": 0.15,
 	"call_delay": 0.05,
-	"login": "wprzyb542",
-	"password": "ujwst"
+	"login": "<login>",
+	"password": "<password>"
 }
