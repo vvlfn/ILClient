@@ -20,7 +20,7 @@ from date_handler import DateHandler
 
 
 def PrintHeader(dh: DateHandler, execute_key: str = "=", exit_key: str = "esc", session_finished: bool = False) -> None:
-    if dh.last_date != dh.current_date:
+    if dh.ReadDate()[1] == 0:
         color = Fore.RED
     else:
         color = Fore.GREEN
