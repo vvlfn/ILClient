@@ -19,7 +19,7 @@ class DateHandler:
         self.SortDates()
 
         # if data is empty set last_date to current date and write to file
-        if not self.dates:
+        if self.dates.get(self.current_date) is None:
             self.WriteToDate(0)
         self.last_date: str = list(self.dates.keys())[-1]
 

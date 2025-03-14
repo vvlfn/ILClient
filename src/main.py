@@ -20,10 +20,15 @@ from date_handler import DateHandler
 
 
 def PrintHeader(dh: DateHandler, execute_key: str = "=", exit_key: str = "esc", session_finished: bool = False) -> None:
-    if dh.ReadDate()[1] == 0:
+    try:
+        if dh.ReadDate()[1] == 0:
+            color = Fore.RED
+        elif dh.ReadDate()[1] == 4:
+            color = Fore.CYAN + Style.BRIGHT
+        else:
+            color = Fore.GREEN
+    except KeyError:
         color = Fore.RED
-    else:
-        color = Fore.GREEN
     os.system("cls")
     print(Fore.MAGENTA + Style.BRIGHT +
           """
@@ -99,6 +104,11 @@ def Main() -> None:
             il_client.StartSession()
         elif keyboard.is_pressed(exit_key):
             sys.exit(0)
+        elif keyboard.is_pressed("r"):
+            os.system(
+                'start https://instaling.pl/student/pages/mainPage.php?student_id=2558385')
+
+            time.sleep(0.5)
 
 
 if __name__ == "__main__":

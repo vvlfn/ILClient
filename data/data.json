@@ -298,5 +298,7 @@
   "Then she took a ____________ job as a criminal defense attorney.": "high-powered",
   "I'm going to __ my _________ until you get this thing working again.": "do paperwork",
   "except IndexError:\r\n            self.last_date: str = list(self.data.keys())[-1]": "",
-  "": ""
+  "": "",
+  "Wa\u017cne informacje!": "Rozpoczynasz sesj\u0119. Doko\u0144cz j\u0105 i po jej zako\u0144czeniu dostaniesz podsumowanie.",
+  "[500, 500]": "[500, 500]"
 }

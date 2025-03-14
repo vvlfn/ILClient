@@ -96,13 +96,11 @@ class ILClient:
             if keyboard.is_pressed("esc"):
                 print("Exiting autocompleting.")
                 return False
-            # self.__call__()
             self.__call__()
             time.sleep(self.call_delay)
         else:
             press("enter")
             return True
-        # press("enter")
 
     def TripleClick(self, coordinates: tuple[int, int]) -> str:
         click(*coordinates, 3)
@@ -110,8 +108,10 @@ class ILClient:
         output: str = pyperclip.paste().strip()
         return output
 
-    def StartSession(self) -> None:
+    def StartSession(self) -> int:
         # Open incognito new page, go to login screen, login and go to main screen
+        time.sleep(0.3)
+        # os.system('start https://')
         hotkey("ctrl", "shift", "n")
         typewrite("https://instaling.pl/teacher.php?page=login", 0)
         time.sleep(1)
@@ -125,12 +125,21 @@ class ILClient:
         press("enter")
         time.sleep(1)
         # press tab 3 times and start session
-        press("tab", 3, 0.1)
-        press("enter")
-        time.sleep(0.3)
-        click(*self.answer_coordinates)
-        time.sleep(0.3)
-        self.AutoComplete()
+        count: int = 0
+
+        for i in range(4):
+            press("tab", 3, 0.1)
+            press("enter")
+            time.sleep(0.7)
+            click(*self.start_button_coordinates)
+            time.sleep(0.3)
+            uninterrupted: bool = self.AutoComplete()
+            if uninterrupted:
+                count += 1
+            else:
+                return count
+
+        return count
 
     def UpdateDataFile(self, data: dict[str, str]) -> None:
         """Insert the updated data dictionary into the data.json file

@@ -1,11 +1,11 @@
 {
-	"start_button_coordinates": [500, 500],
+	"start_button_coordinates": [900, 600],
 	"question_coordinates": [100, 200],
 	"answer_coordinates": [100, 300],
 	"get_answer_key": "=",
 	"exit_key": "esc",
 	"enter_delay": 0.15,
 	"call_delay": 0.05,
-	"login": "<login>",
-	"password": "<password>"
+	"login": "wprzyb542",
+	"password": "ujwst"
 }
