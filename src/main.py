@@ -29,6 +29,16 @@ def PrintHeader(dh: DateHandler, execute_key: str = "=", exit_key: str = "esc", 
             color = Fore.GREEN
     except KeyError:
         color = Fore.RED
+
+    try:
+        if dh.ReadDate(dh.last_date)[1] == 0:
+            color_last = Fore.RED
+        elif dh.ReadDate(dh.last_date)[1] == 4:
+            color_last = Fore.MAGENTA + Style.BRIGHT
+        else:
+            color_last = Fore.YELLOW
+    except KeyError:
+        color_last = Fore.RED
     os.system("cls")
     print(Fore.MAGENTA + Style.BRIGHT +
           """
@@ -49,7 +59,7 @@ def PrintHeader(dh: DateHandler, execute_key: str = "=", exit_key: str = "esc", 
     )
 
     print(
-        f"Last session finished on: {Style.BRIGHT + color + dh.last_date + Style.RESET_ALL} with {Style.BRIGHT + color + str(dh.ReadDate()[1]) + Style.RESET_ALL} sessions"
+        f"Last session finished on: {Style.BRIGHT + color_last + dh.last_date + Style.RESET_ALL} with {Style.BRIGHT + color_last + str(dh.ReadDate(dh.last_date)[1]) + Style.RESET_ALL} sessions"
     )
     print(
         f"Current date: {Style.BRIGHT + color + dh.current_date + Style.RESET_ALL} with {Style.BRIGHT + color + str(dh.ReadDate()[1]) + Style.RESET_ALL} sessions"

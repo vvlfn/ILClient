@@ -21,7 +21,17 @@ class DateHandler:
         # if data is empty set last_date to current date and write to file
         if self.dates.get(self.current_date) is None:
             self.WriteToDate(0)
-        self.last_date: str = list(self.dates.keys())[-1]
+
+        self.last_date = self.GetLastNonEmptyDate()
+
+    def GetLastNonEmptyDate(self) -> str:
+        i: int = -2
+        while True:
+            date: str = list(self.dates.keys())[i]
+            if self.dates.get(date, 0) > 0:
+                return date
+            else:
+                i -= 1
 
     def SetCurrentDate(self) -> bool:
         """sets self.current_date to todays date in the format **YYYY-MM-DD**
