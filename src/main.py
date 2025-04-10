@@ -14,6 +14,7 @@ import numpy.typing as npt
 from colorama import init as crInit, Fore, Back, Style  # type: ignore
 # mypy stubs :c=
 from pyautogui import typewrite, press  # type: ignore
+from globals import SETTINGS_PATH
 
 from il_client import ILClient
 from date_handler import DateHandler
@@ -23,7 +24,7 @@ def PrintHeader(dh: DateHandler, execute_key: str = "=", exit_key: str = "esc", 
     try:
         if dh.ReadDate()[1] == 0:
             color = Fore.RED
-        elif dh.ReadDate()[1] == 4:
+        elif dh.ReadDate()[1] >= 4:
             color = Fore.CYAN + Style.BRIGHT
         else:
             color = Fore.GREEN
@@ -33,10 +34,10 @@ def PrintHeader(dh: DateHandler, execute_key: str = "=", exit_key: str = "esc", 
     try:
         if dh.ReadDate(dh.last_date)[1] == 0:
             color_last = Fore.RED
-        elif dh.ReadDate(dh.last_date)[1] == 4:
-            color_last = Fore.MAGENTA + Style.BRIGHT
+        elif dh.ReadDate(dh.last_date)[1] >= 4:
+            color_last = Fore.YELLOW + Style.BRIGHT
         else:
-            color_last = Fore.YELLOW
+            color_last = Fore.MAGENTA
     except KeyError:
         color_last = Fore.RED
     os.system("cls")
@@ -74,7 +75,7 @@ def Main() -> None:
     Load Settings
     """
     crInit()
-    with open("./data/settings.json") as f:
+    with open(SETTINGS_PATH) as f:
         settings: dict[str, Any] = json.load(f)
 
     execute_key: str = settings.get("get_answer_key", "=")
@@ -90,7 +91,7 @@ def Main() -> None:
     args = parser.parse_args()
 
     il_client: ILClient = ILClient(
-        settings, os.path.join("./data/data.json"), config=args.set_coordinates
+        os.path.join("./data/data.json"), config=args.set_coordinates
     )
 
     dh: DateHandler = DateHandler()

@@ -26,12 +26,15 @@ class DateHandler:
 
     def GetLastNonEmptyDate(self) -> str:
         i: int = -2
-        while True:
-            date: str = list(self.dates.keys())[i]
-            if self.dates.get(date, 0) > 0:
-                return date
-            else:
-                i -= 1
+        try:
+            while True:
+                date: str = list(self.dates.keys())[i]
+                if self.dates.get(date, 0) > 0:
+                    return date
+                else:
+                    i -= 1
+        except IndexError:
+            return self.current_date
 
     def SetCurrentDate(self) -> bool:
         """sets self.current_date to todays date in the format **YYYY-MM-DD**
